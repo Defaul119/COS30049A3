@@ -952,3 +952,35 @@ cache then answers for 7 days); a 500-transaction fetch takes ~25–30 s.
 - `CLAUDE.md` (auto-loaded), `docs/HANDOFF.md` (full cold start), `TODO.md`, this log, `docs/TEST_LOG.md`,
   `docs/PLAN_SHOULD.md`, `docs/AI_USE_LOG.md`;
 - memory: `~/.claude/projects/-Users-tritran2411/memory/cos30049-a3-plan.md`.
+
+## 2026-11-15 — UI remake on branch `ui-remake` (member-led, Opus 5.5)
+
+The member (Cao Tri) was unhappy with the look and asked for a full UI makeover, then for a layout change.
+Work happened in a worktree `../COS30049A3-ui` on branch `ui-remake` (from `main` `d039e64`), previewed on a second
+dev server at :5174 next to the original on :5173. Six commits, all as Defaul119, logged in `docs/AI_USE_LOG.md`:
+
+- `fd9e2ba` palette and fonts: glacier blue, navy and lemon (the member's brief); self-hosted IBM Plex via
+  `@fontsource/ibm-plex-sans` and `-mono` 5.2.6 (SIL OFL, Latin subset; no third-party request, works offline).
+  All styling sits in one new file, `frontend/src/styles/remake.css`, loaded after `base.css` and `shell.css`.
+- `d96cd11` layout v2, after a study of block explorers (Blockstream captured; Etherscan and Blockchair block automated
+  browsers and were not worked around) and a static mockup the member approved: header address search on every page
+  (`HeaderSearch`, hands the text to Screen 1 via `#/?q=`, `/` focuses it), address profile card with a metric strip,
+  tabs on top of their content, a right rail of unusual days on the overview, the day page's heading and day
+  navigation in one card; restrained palette (navy brand, steel data, lemon only for badges/focus, gold `#a67c00` for
+  unusual marks in light mode). Chart hints and About now say "yellow triangles". The tab bar is kept in one place in
+  the tree (switching tabs re-mounted it and lost focus; a test caught it).
+- `0d65064`, `938ef03`, `c10da09` home page: navy hero with one big lookup field and a lemon button, snapshot summary
+  strip (sums of E3), address list with a client-side filter and sort, one-line rows, kind chips and a steel
+  unusual-share bar; the status dot and theme switch moved into the header (grey strip removed; the E2 snapshot line
+  moved to the footer); the header search is hidden on the home page; the three-step guide was removed at the
+  member's request.
+- `23379c6` tests: three timing-sensitive `transactionsTab` tests checked an in-between state that lasted 100-150 ms of
+  mock latency and failed about 1 run in 3 under load, **on `main` too**. Latency is now 400 ms with longer final
+  waits; assertions unchanged.
+
+Checks on the branch: typecheck; 657 front-end tests (7 new: header search, home list); first-screen JS
+**149.4 kB of 150** (almost no headroom: keep anything new lazy); every text pair contrast-checked; full screenshot
+set at 1280/820/390 with no sideways scroll. Not merged into `main`: the member and team review it first.
+
+Decision **D-W-17**: the visual design and layout follow the remake (member's call, 15 Nov). `docs/screenshots/` and
+the report/usability material still show the old look and must be re-taken after the merge.

@@ -98,6 +98,14 @@ Legend: `[ ]` open · `[~]` in progress · `[x]` done · **[you]** needs you · 
 ## Could (only after MS3, with a logged change)
 - [ ] C-01 G7 surprisal (E21) · C-02 profile card (E22) · C-03 G8 calendar, G9 snapshot map · C-04 review marks · C-05 one-command mode and Docker · C-06 watch mode · C-07 printable summary
 
+## UI remake (15 Nov, branch `ui-remake`, not merged)
+- [ ] **[you]** Review the new look on :5174 (light, dark, phone); team review if wanted
+- [ ] Merge `ui-remake` into `main` (both suites in a clean worktree first)
+- [ ] Re-take `docs/screenshots/` and refresh screen images in `docs/report-material/` and `docs/usability/`
+- [ ] Licences: IBM Plex Sans/Mono (SIL OFL 1.1, via @fontsource) in `LICENSES.md` (T43)
+- [ ] First-screen JS is 149.4 kB of 150: keep any new home-page code lazy
+- [x] Timing-flaky `transactionsTab` tests steadied (`23379c6`, also flaky on `main`)
+
 ## Housekeeping found while reading
 - [ ] Fix the chart owners in `explainers/a3/t05-people-rules.tex` to match the plan (or drop owners from the briefing)
 

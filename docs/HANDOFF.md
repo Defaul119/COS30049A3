@@ -73,7 +73,14 @@ after that, `git push`, and check the first CI run with `gh run list`.
 - PIDs in the session scratchpad (`app-backend.pid`, `app-frontend.pid`);
 - otherwise find them with `lsof -i :8000 -i :5173` and stop them with `kill`.
 
-**No agent is running; no worktree or branch other than `main` exists.**
+**15 Nov: UI remake on branch `ui-remake`** (worktree `../COS30049A3-ui`, pushed to origin, **not merged**): new
+look and layout (profile card, rail, header search, home hero and filterable list), self-hosted IBM Plex fonts, all
+styling in `frontend/src/styles/remake.css`; 657 front-end tests; first-screen JS 149.4 kB of 150. Details:
+`docs/WORKLOG.md` (15 Nov) and decision D-W-17. Its dev server runs on :5174 next to `main`'s on :5173 (stop it with
+`lsof -i :5174` and `kill`). The worktree has its own `node_modules` (npm replaced the first symlink); the main checkout
+needs `npm ci` after the merge, because `main`'s `node_modules` has no `@fontsource` packages yet.
+
+**No agent is running.**
 
 ## 3. Where everything is
 
@@ -218,6 +225,10 @@ planning, gates and review, and the cheapest on mechanical work.
 | D-W-16 | Code cooks work in their own git worktree and branch; the lead merges and verifies |
 
 ## 8. What to do next, in order (on resuming)
+
+0. **UI remake (15 Nov):** the member reviews `ui-remake` (and the team if wanted); then merge into `main` after
+   both full suites pass in a clean worktree, re-take `docs/screenshots/` (`npm run screenshots`), refresh the report
+   and usability material that shows screens, and add the IBM Plex (SIL OFL) line to the licences (T43).
 
 1. **Push** once the `workflow` scope is granted (above), and check that the first CI run is green.
 2. **S-11 browser tests** (wave D, Sonnet medium): turn `frontend/scripts/screenshots.mjs`'s journeys into asserted
