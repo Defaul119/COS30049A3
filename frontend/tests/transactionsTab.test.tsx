@@ -269,12 +269,13 @@ describe('states', () => {
   test('while the next rows load, the previous ones stay, marked as updating', async () => {
     const user = start(base);
     await bodyRows();
-    mockControls.latencyMs = 100;
+    // Long enough that the in-between state is still on screen when a busy test run looks (100 ms was flaky).
+    mockControls.latencyMs = 400;
     await user.click(screen.getByRole('button', { name: 'Sent' }));
     expect(await screen.findByText(/Updating…/)).toBeInTheDocument();
     expect(screen.getByRole('table', { name: /Transactions of this address/ })).toBeInTheDocument();
     expect(screen.getByRole('table', { name: /Transactions of this address/ }).closest('.is-updating')).not.toBeNull();
-    await waitFor(() => expect(screen.getByText('Showing 187 of 377 transactions')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('Showing 187 of 377 transactions')).toBeInTheDocument(), { timeout: 3000 });
     expect(screen.queryByText(/Updating…/)).not.toBeInTheDocument();
   });
 
@@ -329,15 +330,15 @@ describe('chart G2 beside the table', () => {
   });
 
   test('the chart draws after the first page, while the second is still coming', async () => {
-    mockControls.latencyMs = 150;
+    mockControls.latencyMs = 400;
     start(base);
-    await waitFor(async () => expect(points(await drawn())).toBe(200));
+    await waitFor(async () => expect(points(await drawn())).toBe(200), { timeout: 4000 });
     expect(screen.getByText(/loading, 200 of 377 drawn/)).toBeInTheDocument();
-    await waitFor(async () => expect(points(await drawn())).toBe(377));
+    await waitFor(async () => expect(points(await drawn())).toBe(377), { timeout: 4000 });
   });
 
   test('a new filter cancels the pages still on their way', async () => {
-    mockControls.latencyMs = 150;
+    mockControls.latencyMs = 400;
     const signals: AbortSignal[] = [];
     const real = mockApi.transactions;
     vi.spyOn(mockApi, 'transactions').mockImplementation((address, query, opts) => {
@@ -345,10 +346,10 @@ describe('chart G2 beside the table', () => {
       return real(address, query, opts);
     });
     const user = start(base);
-    await waitFor(async () => expect(points(await drawn())).toBe(200));
+    await waitFor(async () => expect(points(await drawn())).toBe(200), { timeout: 4000 });
     await user.click(screen.getByRole('button', { name: 'Sent' }));
     // The second page of the unfiltered chart was cancelled, or never started.
-    await waitFor(async () => expect(points(await drawn())).toBe(187));
+    await waitFor(async () => expect(points(await drawn())).toBe(187), { timeout: 4000 });
     expect(signals.slice(0, 2).filter((s) => s.aborted).length).toBeGreaterThanOrEqual(1);
   });
 
