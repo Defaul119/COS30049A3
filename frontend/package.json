@@ -18,6 +18,8 @@
     "node": ">=22"
   },
   "dependencies": {
+    "@fontsource/ibm-plex-mono": "5.2.6",
+    "@fontsource/ibm-plex-sans": "5.2.6",
     "axios": "1.21.0",
     "plotly.js-cartesian-dist-min": "4.1.2",
     "react": "^19.3.0",

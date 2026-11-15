@@ -1,8 +1,17 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
+// Self-hosted IBM Plex (SIL Open Font Licence), Latin subset only: works offline, no third-party request.
+import '@fontsource/ibm-plex-sans/latin-400.css';
+import '@fontsource/ibm-plex-sans/latin-500.css';
+import '@fontsource/ibm-plex-sans/latin-600.css';
+import '@fontsource/ibm-plex-sans/latin-700.css';
+import '@fontsource/ibm-plex-mono/latin-400.css';
+import '@fontsource/ibm-plex-mono/latin-500.css';
+import '@fontsource/ibm-plex-mono/latin-600.css';
 import './styles/base.css';
 import './styles/shell.css';
+import './styles/remake.css';
 
 // Switches in the page URL (before the #), for the screenshot script: ?theme=dark or light always,
 // and, when the app runs on the mock, ?latency=8000, ?offline=1, ?starting=1 and ?busy=8 (a wait of 8

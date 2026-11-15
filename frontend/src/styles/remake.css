@@ -1,0 +1,464 @@
+/* UI remake (15 Nov 2026): glacier blue, navy, and lemon for whatever deserves attention.
+   Loaded after base.css and shell.css, so it only restyles: no markup or behaviour changes.
+   Lemon is never used as text or a thin line on a light background (about 1.3:1 on white);
+   in light mode it is a fill behind navy ink, the focus halo, and the header accents, and the
+   chart's "unusual" colour is a deeper gold that keeps 3:1 against white. In dark mode lemon
+   is used directly (about 12:1 on the navy surfaces). Contrast checked for every text pair. */
+
+:root {
+  --navy-900: #0b1a2e;
+  --navy-800: #0f2236;
+  --navy-700: #13294b;
+  --glacier-100: #eef5fa;
+  --glacier-200: #e3eef7;
+  --glacier-300: #c9e2f5;
+  --glacier-400: #9ccbf0;
+  --lemon: #ffe45c;
+  --lemon-soft: #fff7c7;
+
+  --page: var(--glacier-100);
+  --page-glow: #dcebf7;
+  --surface: #ffffff;
+  --surface-2: #e8f1f8;
+  --border: rgba(16, 42, 74, 0.12);
+  --border-strong: rgba(16, 42, 74, 0.26);
+  --text: var(--navy-800);
+  --text-2: #34495f;
+  --text-muted: #52677d;
+  --axis-ink: #5a6f85;
+  --grid: #dce8f1;
+  --axis: #b4c7d7;
+  --series-1: #3b82c4;
+  --series-2: #a67c00;
+  --bar-neutral: #a9bccd;
+  --ref: #8ba0b5;
+  --accent: var(--navy-700);
+  --accent-hover: var(--navy-900);
+  --on-accent: #ffffff;
+  --link: #1b5fa8;
+  --focus: var(--navy-700);
+  --focus-halo: rgba(255, 228, 92, 0.75);
+  --flag-bg: var(--lemon-soft);
+  --flag-border: #e9c82a;
+  --flag-ink: #4a3a00;
+  --warn-bg: #fff1e6;
+  --warn-border: #f5b88a;
+  --warn-ink: #8a3a0b;
+  --error-bg: #fceeee;
+  --error-border: #eab0b0;
+  --error-ink: #a12c2c;
+  --info-bg: #e7f2fb;
+  --info-border: #b5d4ee;
+  --info-ink: #174e86;
+  --header-bg: var(--navy-800);
+  --header-ink: #ffffff;
+  --header-ink-2: var(--glacier-300);
+  --shadow: 0 1px 2px rgba(15, 34, 54, 0.06), 0 8px 24px rgba(30, 80, 130, 0.07);
+  --shadow-hover: 0 2px 4px rgba(15, 34, 54, 0.08), 0 12px 32px rgba(30, 80, 130, 0.12);
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, 'SF Mono', Menlo, monospace;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --status-wait: #a66300;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --page: #0a1422;
+    --page-glow: #0f2038;
+    --surface: #101e33;
+    --surface-2: #16283f;
+    --border: rgba(156, 203, 240, 0.14);
+    --border-strong: rgba(156, 203, 240, 0.28);
+    --text: #e8f1f8;
+    --text-2: #bed0e2;
+    --text-muted: #93a9bf;
+    --axis-ink: #8aa2ba;
+    --grid: #1c3048;
+    --axis: #2e4663;
+    --series-1: #6fb1e8;
+    --series-2: var(--lemon);
+    --bar-neutral: #4a5f78;
+    --ref: #6f86a0;
+    --accent: var(--glacier-400);
+    --accent-hover: #b8dbf5;
+    --on-accent: #0a1422;
+    --link: var(--glacier-400);
+    --focus: var(--lemon);
+    --focus-halo: rgba(255, 228, 92, 0.25);
+    --flag-bg: #2b2710;
+    --flag-border: #8c7a1a;
+    --flag-ink: var(--lemon);
+    --warn-bg: #33200f;
+    --warn-border: #8a4a1c;
+    --warn-ink: #ffc79a;
+    --error-bg: #3a1a1f;
+    --error-border: #7e2f3a;
+    --error-ink: #ffa8b3;
+    --info-bg: #12263f;
+    --info-border: #2b5079;
+    --info-ink: #b8dbf5;
+    --header-bg: #07101c;
+    --header-ink: #e8f1f8;
+    --header-ink-2: #a9c6de;
+    --shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 8px 24px rgba(0, 0, 0, 0.25);
+    --shadow-hover: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 12px 32px rgba(0, 0, 0, 0.35);
+  }
+}
+:root[data-theme='dark'] {
+  --page: #0a1422;
+  --page-glow: #0f2038;
+  --surface: #101e33;
+  --surface-2: #16283f;
+  --border: rgba(156, 203, 240, 0.14);
+  --border-strong: rgba(156, 203, 240, 0.28);
+  --text: #e8f1f8;
+  --text-2: #bed0e2;
+  --text-muted: #93a9bf;
+  --axis-ink: #8aa2ba;
+  --grid: #1c3048;
+  --axis: #2e4663;
+  --series-1: #6fb1e8;
+  --series-2: var(--lemon);
+  --bar-neutral: #4a5f78;
+  --ref: #6f86a0;
+  --accent: var(--glacier-400);
+  --accent-hover: #b8dbf5;
+  --on-accent: #0a1422;
+  --link: var(--glacier-400);
+  --focus: var(--lemon);
+  --focus-halo: rgba(255, 228, 92, 0.25);
+  --flag-bg: #2b2710;
+  --flag-border: #8c7a1a;
+  --flag-ink: var(--lemon);
+  --warn-bg: #33200f;
+  --warn-border: #8a4a1c;
+  --warn-ink: #ffc79a;
+  --error-bg: #3a1a1f;
+  --error-border: #7e2f3a;
+  --error-ink: #ffa8b3;
+  --info-bg: #12263f;
+  --info-border: #2b5079;
+  --info-ink: #b8dbf5;
+  --header-bg: #07101c;
+  --header-ink: #e8f1f8;
+  --header-ink-2: #a9c6de;
+  --shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 8px 24px rgba(0, 0, 0, 0.25);
+  --shadow-hover: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* ------------------------------------------------------------------ base */
+
+body {
+  background: radial-gradient(1200px 420px at 50% -120px, var(--page-glow), transparent 70%) no-repeat, var(--page);
+  font-feature-settings: 'ss02';
+}
+h1 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+h2 {
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+h3,
+h4 {
+  font-weight: 650;
+}
+.num,
+.amount,
+.stat dd {
+  font-variant-numeric: tabular-nums;
+}
+::selection {
+  background: var(--lemon);
+  color: var(--navy-800);
+}
+
+/* Focus: a solid ring plus a lemon halo, so the place where the keyboard is always stands out. */
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 7px var(--focus-halo);
+  border-radius: 6px;
+}
+/* Headings and panels that receive focus by script (after navigation) show no ring or halo. */
+[tabindex='-1']:focus {
+  box-shadow: none;
+}
+
+/* ------------------------------------------------------------------ header */
+
+.app-header {
+  background: var(--header-bg);
+  border-bottom: 0;
+}
+.app-header .brand {
+  color: var(--header-ink);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+.app-header .brand-mark {
+  fill: var(--glacier-400);
+}
+.app-header .brand-bar {
+  fill: var(--navy-800);
+}
+.app-header .brand-bar-flag {
+  fill: var(--lemon);
+}
+.app-header .main-nav a {
+  color: var(--header-ink-2);
+}
+.app-header .main-nav a:hover {
+  background: rgba(156, 203, 240, 0.12);
+  color: var(--header-ink);
+}
+.app-header .main-nav a[aria-current='page'] {
+  color: var(--header-ink);
+  box-shadow: inset 0 -3px 0 var(--lemon);
+}
+.app-header .nav-toggle {
+  background: transparent;
+  color: var(--header-ink);
+  border-color: rgba(201, 226, 245, 0.4);
+}
+.app-header :focus-visible {
+  outline-color: var(--lemon);
+  box-shadow: none;
+}
+.header-bar {
+  background: var(--surface);
+  border-top: 0;
+  border-bottom: 1px solid var(--border);
+}
+/* The header-bar sits inside the navy header; its focus ring returns to the page's. */
+.app-header .header-bar :focus-visible {
+  outline-color: var(--focus);
+  box-shadow: 0 0 0 7px var(--focus-halo);
+}
+
+/* ------------------------------------------------------------------ surfaces */
+
+.card,
+.stat,
+.loading-block {
+  border-color: var(--border);
+  box-shadow: var(--shadow);
+}
+.card {
+  padding: 22px;
+}
+@media (max-width: 639px) {
+  .card {
+    padding: 16px;
+  }
+}
+.eyebrow,
+.stat dt {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.72rem;
+  font-weight: 650;
+  color: var(--text-muted);
+}
+.stat {
+  position: relative;
+  padding: 14px 18px 16px;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.stat::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--series-1), var(--glacier-400));
+}
+.stat dd {
+  margin-top: 4px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+.stat-sub {
+  margin-top: 2px;
+}
+.address-title {
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------------ controls */
+
+.btn {
+  border-radius: var(--radius-sm);
+  transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+}
+.btn-primary {
+  box-shadow: 0 1px 2px rgba(11, 26, 46, 0.2);
+}
+.btn-primary:hover {
+  box-shadow: 0 4px 12px rgba(19, 41, 75, 0.25);
+}
+.btn-secondary {
+  background: var(--surface);
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+.btn-secondary:hover {
+  background: var(--surface-2);
+  border-color: var(--series-1);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.icon-button {
+  border-radius: var(--radius-sm);
+}
+.text-input,
+select {
+  border-radius: var(--radius-sm);
+  border-color: var(--border-strong);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+.text-input:hover,
+select:hover {
+  border-color: var(--series-1);
+}
+.chip {
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+.chip:hover {
+  border-color: var(--series-1);
+}
+.chip[aria-pressed='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+.example-list a {
+  border-radius: 999px;
+  padding: 0 14px;
+}
+
+/* Tabs: a navy underline and weight mark the current one (not colour alone). */
+.tabs ul {
+  border-bottom: 1px solid var(--border-strong);
+}
+.tabs a {
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+.tabs a[aria-current='page'] {
+  color: var(--text);
+  font-weight: 700;
+  border-bottom-color: var(--accent);
+}
+
+/* ------------------------------------------------------------------ flags: lemon draws the eye */
+
+.badge-flagged {
+  background: var(--lemon);
+  color: var(--navy-800);
+  border-color: var(--flag-border);
+}
+.badge-flagged .icon {
+  color: var(--navy-800);
+}
+.day-link {
+  border-color: var(--flag-border);
+  border-left: 5px solid var(--series-2);
+  background: var(--flag-bg);
+  transition: box-shadow 150ms ease, transform 150ms ease;
+}
+.day-link:hover {
+  border-color: var(--flag-border);
+  border-left-color: var(--series-2);
+  box-shadow: var(--shadow-hover);
+}
+.flag-callout {
+  border-color: var(--flag-border);
+  border-left: 6px solid var(--series-2);
+  background: var(--flag-bg);
+}
+.flag-callout h3 {
+  color: var(--flag-ink);
+}
+.tx-row {
+  transition: background-color 150ms ease, box-shadow 150ms ease;
+}
+.tx-row.is-flagged {
+  border-left-color: var(--series-2);
+  background: linear-gradient(90deg, var(--flag-bg), var(--surface) 55%);
+}
+.tx-row.is-selected {
+  border-color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--info-bg);
+  box-shadow: 0 0 0 1px var(--accent), var(--shadow);
+}
+.tx-row.is-selected.is-flagged {
+  border-left-color: var(--series-2);
+}
+.nav-link {
+  border-radius: var(--radius-sm);
+}
+.nav-link-flag {
+  border-color: var(--flag-border);
+  background: var(--flag-bg);
+}
+.limitation {
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border-color: var(--border-strong);
+}
+
+/* ------------------------------------------------------------------ tables */
+
+.address-table thead th,
+.data-table thead th,
+.verdict-table thead th {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.7rem;
+  font-weight: 650;
+  color: var(--text-muted);
+  background: var(--surface-2);
+}
+.address-table tbody tr,
+.data-table tbody tr {
+  transition: background-color 120ms ease;
+}
+.address-table tbody tr:hover {
+  background: var(--info-bg);
+}
+.verdict-table .is-deciding {
+  background: var(--info-bg);
+  box-shadow: inset 4px 0 0 var(--accent);
+}
+
+/* ------------------------------------------------------------------ footer */
+
+.app-footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+.footer-limitation {
+  color: var(--text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .chip,
+  .day-link,
+  .tx-row,
+  .tabs a,
+  .text-input,
+  select {
+    transition: none;
+  }
+  .btn:active {
+    transform: none;
+  }
+}
