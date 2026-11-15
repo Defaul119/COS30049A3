@@ -839,3 +839,252 @@ select:hover {
     transition: none;
   }
 }
+
+/* ------------------------------------------------------------------ home (Screen 1) */
+
+.home-hero {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 36px 36px 32px;
+  border-radius: var(--radius);
+  background: radial-gradient(600px 260px at 85% 120%, rgba(156, 203, 240, 0.18), transparent 70%), var(--navy-800);
+  color: #ffffff;
+}
+:root[data-theme='dark'] .home-hero {
+  background: radial-gradient(600px 260px at 85% 120%, rgba(156, 203, 240, 0.12), transparent 70%), #0f1c30;
+  border: 1px solid var(--border);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .home-hero {
+    background: radial-gradient(600px 260px at 85% 120%, rgba(156, 203, 240, 0.12), transparent 70%), #0f1c30;
+    border: 1px solid var(--border);
+  }
+}
+.hero-art {
+  position: absolute;
+  right: 28px;
+  bottom: 0;
+  width: min(38%, 340px);
+  height: auto;
+  pointer-events: none;
+}
+.hero-art-bar {
+  fill: rgba(156, 203, 240, 0.16);
+}
+.hero-art-flag {
+  fill: var(--lemon);
+  opacity: 0.9;
+}
+.home-hero .intro {
+  position: relative;
+  max-width: 40rem;
+}
+.hero-eyebrow {
+  margin: 0 0 8px;
+  color: var(--lemon);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.home-hero h1 {
+  color: #ffffff;
+  font-size: clamp(1.6rem, 1.1rem + 2vw, 2.3rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+.home-hero .intro .lede {
+  color: var(--glacier-300);
+  font-size: 1rem;
+  max-width: 36rem;
+}
+/* The lookup is a white panel inside the hero, so its errors and states keep their usual colours. */
+.home-hero .lookup-card {
+  position: relative;
+  max-width: 46rem;
+  gap: 10px;
+  padding: 18px 20px 20px;
+  border: 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  color: var(--text);
+}
+.home-hero .lookup-card h2 {
+  font-size: 0.95rem;
+}
+.home-hero .lookup-card .input-row .text-input {
+  min-height: 46px;
+  font-size: 0.95rem;
+}
+.home-hero .lookup-card .btn-primary {
+  min-height: 46px;
+  padding: 0 20px;
+}
+@media (max-width: 639px) {
+  .home-hero {
+    padding: 24px 16px 16px;
+  }
+  .hero-art {
+    width: 55%;
+    opacity: 0.6;
+  }
+  .home-hero .lookup-card {
+    padding: 14px;
+  }
+}
+
+.home-summary {
+  padding: 0 24px;
+}
+.home-summary .metrics {
+  margin: 0;
+  border-top: 0;
+}
+@media (max-width: 759px) {
+  .home-summary {
+    padding: 0 16px;
+  }
+}
+
+.how-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.how-steps li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text-2);
+  font-size: 0.85rem;
+}
+.how-steps strong {
+  color: var(--text);
+  font-weight: 600;
+}
+.how-num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+@media (max-width: 759px) {
+  .how-steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.recent-section h2,
+.snapshot-section h2 {
+  font-size: 1rem;
+}
+
+.table-card {
+  padding: 0;
+  overflow: hidden;
+}
+.table-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.toolbar-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.toolbar-field:first-child {
+  flex: 1 1 16rem;
+  max-width: 24rem;
+}
+.toolbar-icon {
+  position: absolute;
+  left: 10px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+.toolbar-input {
+  width: 100%;
+  min-height: 38px;
+  padding-left: 32px;
+  font-size: 0.88rem;
+}
+.toolbar-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+.toolbar-select {
+  min-height: 38px;
+  font-size: 0.88rem;
+}
+.toolbar-count {
+  margin: 0 0 0 auto;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+.table-empty {
+  margin: 0;
+  padding: 28px 20px;
+  color: var(--text-muted);
+  text-align: center;
+}
+.table-card .address-table thead th {
+  border-radius: 0;
+}
+.kind-chip {
+  display: inline-block;
+  padding: 0 6px;
+  border-radius: 4px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  font-size: 0.7rem;
+  color: var(--text-2);
+}
+.unusual-cell {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+.share-bar {
+  display: block;
+  width: 96px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.share-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--flag-mark);
+}
+.address-link {
+  font-weight: 500;
+  text-decoration: none;
+}
+.address-link:hover {
+  text-decoration: underline;
+}

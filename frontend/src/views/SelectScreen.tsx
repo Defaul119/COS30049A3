@@ -93,13 +93,16 @@ export function SelectScreen({ query }: { query: string | null }) {
 
   return (
     <div className="page page-select">
-      <section className="intro">
-        <PageHeading>Explore a Bitcoin address's activity</PageHeading>
-        <p className="lede">
-          Pick an address to see its transactions day by day. Open any day to check which transactions are unusual
-          compared with that address's own history, and why.
-        </p>
-      </section>
+      <div className="home-hero">
+        <HeroArt />
+        <section className="intro">
+          <p className="hero-eyebrow">Bitcoin address activity, explained</p>
+          <PageHeading>Explore a Bitcoin address's activity</PageHeading>
+          <p className="lede">
+            Pick an address to see its transactions day by day. Open any day to check which transactions are unusual
+            compared with that address's own history, and why.
+          </p>
+        </section>
 
       <section className="card lookup-card" aria-labelledby="lookup-title">
         <h2 id="lookup-title">Look up an address</h2>
@@ -200,6 +203,24 @@ export function SelectScreen({ query }: { query: string | null }) {
         ) : null}
         {lookup.status === 'failed' ? <ErrorState error={lookup.error} onRetry={() => void check(value)} headingLevel={3} /> : null}
       </section>
+      </div>
+
+      {list.status === 'success' && list.data.addresses.length > 0 ? <SnapshotSummary addresses={list.data.addresses} snapshotDate={list.data.snapshot.snapshotDate} source={list.data.snapshot.source} /> : null}
+
+      <ol className="how-steps" aria-label="How to use the explorer">
+        <li>
+          <span className="how-num" aria-hidden="true">1</span>
+          <span><strong>Pick an address</strong> from the list or look one up.</span>
+        </li>
+        <li>
+          <span className="how-num" aria-hidden="true">2</span>
+          <span><strong>Read its timeline</strong>: days with an unusual transaction are marked.</span>
+        </li>
+        <li>
+          <span className="how-num" aria-hidden="true">3</span>
+          <span><strong>Open a day</strong> to see which transaction stands out, and why.</span>
+        </li>
+      </ol>
 
       {recent.length > 0 ? (
         <section className="recent-section" aria-labelledby="recent-title">
@@ -239,67 +260,188 @@ export function SelectScreen({ query }: { query: string | null }) {
   );
 }
 
+/** The brand's bar motif, drawn large and quiet behind the hero. Decorative only. */
+function HeroArt() {
+  const bars = [22, 38, 30, 52, 44, 66, 48, 80, 58, 72];
+  return (
+    <svg className="hero-art" viewBox="0 0 220 100" preserveAspectRatio="xMaxYMax meet" aria-hidden="true" focusable="false">
+      {bars.map((h, i) => (
+        <rect key={i} x={i * 22} y={100 - h} width="14" height={h} rx="2" className={i === 7 ? 'hero-art-flag' : 'hero-art-bar'} />
+      ))}
+    </svg>
+  );
+}
+
+/** The whole snapshot at a glance, summed from E3's list. */
+function SnapshotSummary({ addresses, snapshotDate, source }: { addresses: AddressSummary[]; snapshotDate: string; source: string }) {
+  const tx = addresses.reduce((n, a) => n + a.txCount, 0);
+  const scored = addresses.reduce((n, a) => n + a.scoredCount, 0);
+  const flagged = addresses.reduce((n, a) => n + a.flaggedCount, 0);
+  const share = scored ? ((flagged / scored) * 100).toFixed(1) : '0';
+  return (
+    <section className="card home-summary" aria-label="The snapshot at a glance">
+      <dl className="stat-row metrics">
+        <div className="stat">
+          <dt>Addresses</dt>
+          <dd>
+            {formatCount(addresses.length)}
+            <span className="stat-sub">chosen before any analysis</span>
+          </dd>
+        </div>
+        <div className="stat">
+          <dt>Transactions</dt>
+          <dd>
+            {formatCount(tx)}
+            <span className="stat-sub">{formatCount(scored)} with enough history to score</span>
+          </dd>
+        </div>
+        <div className="stat">
+          <dt>Unusual</dt>
+          <dd>
+            {formatCount(flagged)}
+            <span className="stat-sub">{share}% of scored transactions</span>
+          </dd>
+        </div>
+        <div className="stat">
+          <dt>Snapshot</dt>
+          <dd>
+            {formatDay(snapshotDate)}
+            <span className="stat-sub">{source} · days in UTC</span>
+          </dd>
+        </div>
+      </dl>
+    </section>
+  );
+}
+
+type SortKey = 'tx' | 'unusual' | 'share' | 'recent';
+const SORT_LABEL: Record<SortKey, string> = {
+  tx: 'Most transactions',
+  unusual: 'Most unusual',
+  share: 'Highest unusual share',
+  recent: 'Most recently active',
+};
+
 function AddressTable({ addresses }: { addresses: AddressSummary[] }) {
   const [{ method }] = usePreferences();
+  const [filter, setFilter] = useState('');
+  const [sort, setSort] = useState<SortKey>('tx');
+  const shareOf = (a: AddressSummary) => (a.scoredCount ? a.flaggedCount / a.scoredCount : -1);
+  const maxShare = Math.max(0.0001, ...addresses.map(shareOf));
+  const needle = filter.trim().toLowerCase();
+  const shown = addresses
+    .filter((a) => !needle || a.address.toLowerCase().includes(needle) || KIND_LABEL[a.kind].toLowerCase().includes(needle))
+    .sort((x, y) => {
+      if (sort === 'unusual') return y.flaggedCount - x.flaggedCount || y.txCount - x.txCount;
+      if (sort === 'share') return shareOf(y) - shareOf(x) || y.txCount - x.txCount;
+      if (sort === 'recent') return y.lastSeen.localeCompare(x.lastSeen) || y.txCount - x.txCount;
+      return y.txCount - x.txCount;
+    });
+
   return (
     <div className="card table-card">
-      <table className="address-table">
-        <caption className="sr-only">Addresses in the snapshot, with their activity, how many transactions are scored and how many are unusual</caption>
-        <thead>
-          <tr>
-            <th scope="col">Address</th>
-            <th scope="col">Active (UTC)</th>
-            <th scope="col" className="num">
-              Transactions
-            </th>
-            <th scope="col" className="num">
-              Scored
-            </th>
-            <th scope="col" className="num">
-              Unusual
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {addresses.map((a) => {
-            const pct = a.scoredCount ? Math.round((a.flaggedCount / a.scoredCount) * 100) : 0;
-            return (
-              <tr key={a.address}>
-                <th scope="row" data-label="Address">
-                  <span className="address-cell">
-                    <WatchStar address={a.address} />
-                    <span>
-                      <a className="address-link mono" href={paths.timeline(a.address, method ?? undefined)} aria-label={`Open activity for ${a.address}`}>
-                        {shortAddress(a.address, 12, 8)}
-                      </a>
-                      <span className="cell-sub">{KIND_LABEL[a.kind]}{a.source === 'live' ? ' · live data' : ''}</span>
+      <div className="table-toolbar">
+        <div className="toolbar-field">
+          <label htmlFor="address-filter" className="sr-only">
+            Filter the addresses
+          </label>
+          <Icon name="search" className="toolbar-icon" />
+          <input
+            id="address-filter"
+            type="search"
+            className="text-input toolbar-input"
+            placeholder="Filter by address or type"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            autoComplete="off"
+            spellCheck={false}
+          />
+        </div>
+        <div className="toolbar-field">
+          <label htmlFor="address-sort" className="toolbar-label">
+            Sort by
+          </label>
+          <select id="address-sort" className="text-input toolbar-select" value={sort} onChange={(e) => setSort(e.target.value as SortKey)}>
+            {(Object.keys(SORT_LABEL) as SortKey[]).map((k) => (
+              <option key={k} value={k}>
+                {SORT_LABEL[k]}
+              </option>
+            ))}
+          </select>
+        </div>
+        <p className="toolbar-count" role="status">
+          {shown.length === addresses.length ? plural(addresses.length, 'address', 'addresses') : `${shown.length} of ${plural(addresses.length, 'address', 'addresses')}`}
+        </p>
+      </div>
+      {shown.length === 0 ? (
+        <p className="table-empty">No address matches “{filter.trim()}”.</p>
+      ) : (
+        <table className="address-table">
+          <caption className="sr-only">Addresses in the snapshot, with their activity, how many transactions are scored and how many are unusual</caption>
+          <thead>
+            <tr>
+              <th scope="col">Address</th>
+              <th scope="col">Active (UTC)</th>
+              <th scope="col" className="num">
+                Transactions
+              </th>
+              <th scope="col" className="num">
+                Scored
+              </th>
+              <th scope="col" className="num">
+                Unusual
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {shown.map((a) => {
+              const pct = a.scoredCount ? Math.round((a.flaggedCount / a.scoredCount) * 100) : 0;
+              return (
+                <tr key={a.address}>
+                  <th scope="row" data-label="Address">
+                    <span className="address-cell">
+                      <WatchStar address={a.address} />
+                      <span>
+                        <a className="address-link mono" href={paths.timeline(a.address, method ?? undefined)} aria-label={`Open activity for ${a.address}`}>
+                          {shortAddress(a.address, 12, 8)}
+                        </a>
+                        <span className="cell-sub">
+                          <span className="kind-chip">{KIND_LABEL[a.kind]}</span>
+                          {a.source === 'live' ? ' · live data' : ''}
+                        </span>
+                      </span>
                     </span>
-                  </span>
-                </th>
-                <td data-label="Active (UTC)">{formatDayRange(dayKey(a.firstSeen), dayKey(a.lastSeen))}</td>
-                <td data-label="Transactions" className="num">
-                  {formatCount(a.txCount)}
-                </td>
-                <td data-label="Scored" className="num">
-                  {formatCount(a.scoredCount)}
-                </td>
-                <td data-label="Unusual" className="num">
-                  {a.history === 'insufficient' ? (
-                    <span className="badge badge-not-scored">Short history, not scored</span>
-                  ) : a.flaggedCount > 0 ? (
-                    <span className="unusual-count">
-                      <Icon name="flag" className="flag-icon" /> {formatCount(a.flaggedCount)}{' '}
-                      <span className="muted">({pct}% of scored)</span>
-                    </span>
-                  ) : (
-                    <span className="muted">None</span>
-                  )}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                  </th>
+                  <td data-label="Active (UTC)">{formatDayRange(dayKey(a.firstSeen), dayKey(a.lastSeen))}</td>
+                  <td data-label="Transactions" className="num">
+                    {formatCount(a.txCount)}
+                  </td>
+                  <td data-label="Scored" className="num">
+                    {formatCount(a.scoredCount)}
+                  </td>
+                  <td data-label="Unusual" className="num">
+                    {a.history === 'insufficient' ? (
+                      <span className="badge badge-not-scored">Short history, not scored</span>
+                    ) : a.flaggedCount > 0 ? (
+                      <span className="unusual-cell">
+                        <span className="unusual-count">
+                          <Icon name="flag" className="flag-icon" /> {formatCount(a.flaggedCount)}{' '}
+                          <span className="muted">({pct}% of scored)</span>
+                        </span>
+                        <span className="share-bar" aria-hidden="true">
+                          <span style={{ width: `${Math.max(4, (shareOf(a) / maxShare) * 100)}%` }} />
+                        </span>
+                      </span>
+                    ) : (
+                      <span className="muted">None</span>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }
