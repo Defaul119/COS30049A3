@@ -40,7 +40,7 @@ function Views() {
 
   return (
     <ErrorBoundary resetKey={key}>
-      {route.screen === 'select' ? <SelectScreen query={route.query} /> : null}
+      {route.screen === 'select' ? <SelectScreen key={route.query ?? ''} query={route.query} /> : null}
       {route.screen === 'timeline' ? <TimelineScreen key={route.address} address={route.address} method={route.method} tab={{ name: 'overview' }} /> : null}
       {route.screen === 'transactions' ? (
         <TimelineScreen key={route.address} address={route.address} method={route.method} tab={{ name: 'transactions', search: route.search }} />

@@ -228,7 +228,7 @@ export function G2TransactionsOverTime({ address, method, rows, frame, loading, 
       headingLevel={2}
       caption={`${snapshotCaption(settings.snapshot, address)} · times in UTC · flagged by ${methodName}${loading ? ` · loading, ${formatCount(loading.loaded)} of ${formatCount(loading.total)} drawn` : ''}`}
       summary={summary}
-      hint={`Select a point to open that transaction. Drag to zoom on the time axis, which also sets the dates above; double-click to reset.${onSelect ? ' The box and lasso tools in the tool bar select points instead, and the table then shows only those.' : ''} Filled marks were received and outlined marks were sent; the orange triangles are unusual.`}
+      hint={`Select a point to open that transaction. Drag to zoom on the time axis, which also sets the dates above; double-click to reset.${onSelect ? ' The box and lasso tools in the tool bar select points instead, and the table then shows only those.' : ''} Filled marks were received and outlined marks were sent; the yellow triangles are unusual.`}
       figure={figure}
       table={table}
       revision={revision}

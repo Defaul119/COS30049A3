@@ -199,7 +199,7 @@ export function G5WhatIfResponse({ curve, address, methodId, onMethodChange, mar
         title="How the score changes with the amount"
         caption={`${snapshotCaption(settings.snapshot, address)} · hypothetical amounts, compared with this address's history before ${curve.time.slice(0, 16).replace('T', ' ')} UTC`}
         summary={`Line chart of the ${methodName} score for ${curve.direction === 'out' ? 'sent' : 'received'} amounts from ${formatBtcRounded(first)} to ${formatBtcRounded(last)} on a log scale. ${reading}`}
-        hint="Select a point of the curve to use that amount in the form. Drag to zoom, double-click to reset. Orange triangles are flagged amounts."
+        hint="Select a point of the curve to use that amount in the form. Drag to zoom, double-click to reset. Yellow triangles are flagged amounts."
         figure={figure}
         table={table}
         revision={`${address}|${curve.direction}|${method.id}`}

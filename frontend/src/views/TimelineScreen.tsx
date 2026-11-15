@@ -79,74 +79,87 @@ function Timeline({ data, tab, method, updating }: { data: TimelineResponse; tab
   const spanDays = dayCount(first, last);
   const open = (date: string) => navigate(paths.day(data.address, date, method));
 
+  const sourceLine = data.live ? (
+    <p className="source-line">Source: {data.snapshot.source} · live data · days in UTC</p>
+  ) : (
+    <p className="source-line">
+      Source: {data.snapshot.source} · snapshot of {formatDay(data.snapshot.snapshotDate)} · days in UTC
+      {data.snapshot.illustrative ? ' · illustrative data' : ''}
+    </p>
+  );
+
+  const tabContent =
+    tab.name === 'transactions' ? (
+      <TransactionsTab timeline={data} search={tab.search} />
+    ) : tab.name === 'what-if' ? (
+      <WhatIfLab timeline={data} search={tab.search} />
+    ) : null;
+
   return (
     <>
-      <header className="page-head">
-        <p className="eyebrow">Address{kind.ok ? ` · ${KIND_LABEL[kind.kind]}` : ''}</p>
-        <div className="address-heading">
-          <PageHeading className="address-title mono">{data.address}</PageHeading>
-          <CopyButton value={data.address} label="address" />
-          <WatchStar address={data.address} showText />
-        </div>
-        {data.live ? (
-          <p className="source-line">Source: {data.snapshot.source} · live data · days in UTC</p>
-        ) : (
-          <p className="source-line">
-            Source: {data.snapshot.source} · snapshot of {formatDay(data.snapshot.snapshotDate)} · days in UTC
-            {data.snapshot.illustrative ? ' · illustrative data' : ''}
-          </p>
-        )}
+      {/* The address's profile: who it is, what can be done with it, and its key numbers in one block. */}
+      <section className="card profile" aria-label="Address summary">
+        <header className="page-head profile-top">
+          <div className="profile-id">
+            <p className="eyebrow">Address{kind.ok ? ` · ${KIND_LABEL[kind.kind]}` : ''}</p>
+            <PageHeading className="address-title mono">{data.address}</PageHeading>
+            {sourceLine}
+          </div>
+          <div className="profile-actions">
+            <CopyButton value={data.address} label="address" />
+            <WatchStar address={data.address} showText />
+          </div>
+          <div className="profile-method">
+            <MethodMenu method={method} updating={updating} />
+          </div>
+        </header>
         {data.live ? (
           <Suspense fallback={null}>
             <LiveBanner address={data.address} live={data.live} />
           </Suspense>
         ) : null}
-        <MethodMenu method={method} updating={updating} />
-      </header>
 
-      <dl className={`stat-row${updating ? ' is-updating' : ''}`} aria-busy={updating}>
-        <div className="stat">
-          <dt>Transactions</dt>
-          <dd>{formatCount(data.totals.txCount)}</dd>
-        </div>
-        <div className="stat">
-          <dt>Active</dt>
-          <dd>
-            {formatDayRange(first, last)}
-            <span className="stat-sub">{plural(spanDays, 'calendar day')}</span>
-          </dd>
-        </div>
-        <div className="stat">
-          <dt>Unusual</dt>
-          <dd>
-            {insufficient ? (
-              'Not scored'
-            ) : (
-              <>
-                {formatCount(data.totals.flaggedCount)}
-                <span className="stat-sub">
-                  on {plural(data.totals.flaggedDays, 'day')} by {labels[data.snapshot.method.id].name}
-                </span>
-              </>
-            )}
-          </dd>
-        </div>
-        <div className="stat">
-          <dt>Scored</dt>
-          <dd>
-            {formatCount(data.totals.scoredCount)} of {formatCount(data.totals.txCount)}
-            <span className="stat-sub">enough earlier history</span>
-          </dd>
-        </div>
-      </dl>
+        <dl className={`stat-row metrics${updating ? ' is-updating' : ''}`} aria-busy={updating}>
+          <div className="stat">
+            <dt>Transactions</dt>
+            <dd>{formatCount(data.totals.txCount)}</dd>
+          </div>
+          <div className="stat">
+            <dt>Active</dt>
+            <dd>
+              {formatDayRange(first, last)}
+              <span className="stat-sub">{plural(spanDays, 'calendar day')}</span>
+            </dd>
+          </div>
+          <div className="stat stat-unusual">
+            <dt>Unusual</dt>
+            <dd>
+              {insufficient ? (
+                'Not scored'
+              ) : (
+                <>
+                  {formatCount(data.totals.flaggedCount)}
+                  <span className="stat-sub">
+                    on {plural(data.totals.flaggedDays, 'day')} by {labels[data.snapshot.method.id].name}
+                  </span>
+                </>
+              )}
+            </dd>
+          </div>
+          <div className="stat">
+            <dt>Scored</dt>
+            <dd>
+              {formatCount(data.totals.scoredCount)} of {formatCount(data.totals.txCount)}
+              <span className="stat-sub">enough earlier history</span>
+            </dd>
+          </div>
+        </dl>
+      </section>
 
-      <AddressTabs address={data.address} tab={tab.name} method={method} />
-
-      {tab.name === 'transactions' ? <TransactionsTab timeline={data} search={tab.search} /> : null}
-      {tab.name === 'what-if' ? <WhatIfLab timeline={data} search={tab.search} /> : null}
-      {tab.name === 'overview' ? (
-        <>
-          {insufficient ? (
+      {/* One tree for every tab, so the tab bar stays mounted (and keeps focus) when the tab changes. */}
+      <div className={`address-grid${tab.name === 'overview' ? ' has-rail' : ''}${updating ? ' is-updating' : ''}`} aria-busy={updating}>
+        <div className="address-main">
+          {tab.name === 'overview' && insufficient ? (
             <StatePanel
               tone="warning"
               title="Not enough history to score this address"
@@ -170,18 +183,23 @@ function Timeline({ data, tab, method, updating }: { data: TimelineResponse; tab
               </p>
             </StatePanel>
           ) : null}
-
-          <div className={`timeline-layout${updating ? ' is-updating' : ''}`} aria-busy={updating}>
-            <div className="card">
-              <G1DailyActivity timeline={data} onOpenDay={open} />
-            </div>
-
-            <FlaggedDays address={data.address} days={flaggedDays} insufficient={insufficient} method={method} />
+          <div className={`card tab-card${tab.name === 'overview' ? '' : ' tab-card-bare'}`}>
+            <AddressTabs address={data.address} tab={tab.name} method={method} />
+            {tab.name === 'overview' ? (
+              <div className="tab-card-body">
+                <G1DailyActivity timeline={data} onOpenDay={open} />
+              </div>
+            ) : null}
           </div>
-
-          <ReplayPanel timeline={data} method={method} />
-        </>
-      ) : null}
+          {tabContent}
+        </div>
+        {tab.name === 'overview' ? (
+          <aside className="rail" aria-label="Unusual activity">
+            <FlaggedDays address={data.address} days={flaggedDays} insufficient={insufficient} method={method} />
+          </aside>
+        ) : null}
+      </div>
+      {tab.name === 'overview' ? <ReplayPanel timeline={data} method={method} /> : null}
     </>
   );
 }

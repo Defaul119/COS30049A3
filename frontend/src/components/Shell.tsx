@@ -4,6 +4,7 @@ import { useSettings } from '../hooks/useSettings';
 import { useToasts } from '../hooks/useToasts';
 import { formatDay } from '../lib/dates';
 import { paths, useRoute } from '../lib/router';
+import { HeaderSearch } from './HeaderSearch';
 import { Icon } from './Icon';
 import { MainNav } from './MainNav';
 import { OfflineBanner } from './OfflineBanner';
@@ -65,8 +66,9 @@ export function Shell({ children }: { children: ReactNode }) {
               <rect x="14" y="10" width="4" height="16" rx="1" className="brand-bar" />
               <rect x="22" y="6" width="4" height="20" rx="1" className="brand-bar brand-bar-flag" />
             </svg>
-            <span>Bitcoin Address Activity Explorer</span>
+            <span className="brand-name">Bitcoin Address Activity Explorer</span>
           </a>
+          <HeaderSearch />
           <button
             type="button"
             className="nav-toggle"

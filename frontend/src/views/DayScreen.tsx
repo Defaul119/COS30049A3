@@ -37,14 +37,19 @@ export function DayScreen({ address, date, txid, method }: { address: string; da
           { label: validDate ? formatDay(date) : 'Day' },
         ]}
       />
-      <header className="page-head">
-        <p className="eyebrow mono">{shortAddress(address, 12, 8)}</p>
-        <PageHeading>{validDate ? formatDay(date) : 'Unknown day'}</PageHeading>
-        <p className="source-line">Transactions confirmed on this day (UTC)</p>
-        <MethodMenu method={method} updating={updating} />
-      </header>
-
-      {timeline.status === 'success' && validDate ? <DayNav timeline={timeline.data} date={date} method={method} /> : null}
+      <section className="card profile profile-day" aria-label="Day summary">
+        <header className="page-head profile-top">
+          <div className="profile-id">
+            <p className="eyebrow mono">{shortAddress(address, 12, 8)}</p>
+            <PageHeading>{validDate ? formatDay(date) : 'Unknown day'}</PageHeading>
+            <p className="source-line">Transactions confirmed on this day (UTC)</p>
+          </div>
+          <div className="profile-method">
+            <MethodMenu method={method} updating={updating} />
+          </div>
+        </header>
+        {timeline.status === 'success' && validDate ? <DayNav timeline={timeline.data} date={date} method={method} /> : null}
+      </section>
 
       {!validDate ? (
         <StatePanel

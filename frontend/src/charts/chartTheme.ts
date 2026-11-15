@@ -14,7 +14,7 @@ export interface ChartPalette {
   axis: string;
   /** Ordinary marks (blue). */
   ordinary: string;
-  /** Unusual marks (orange). Always paired with a shape or a word, never colour alone. */
+  /** Unusual marks (gold in light mode, lemon in dark). Always paired with a shape or a word, never colour alone. */
   unusual: string;
   /** Marks that carry no verdict (grey). */
   neutral: string;

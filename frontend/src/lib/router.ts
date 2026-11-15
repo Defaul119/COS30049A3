@@ -60,6 +60,8 @@ const query = (...parts: string[]) => {
 // `method` is the deciding method the link keeps; the default is left out.
 export const paths = {
   select: () => '#/',
+  /** Screen 1 with its lookup box filled in and checked (the header search uses it). */
+  lookup: (text: string) => `#/?q=${encodeURIComponent(text)}`,
   models: () => '#/models',
   watchlist: () => '#/watchlist',
   about: () => '#/about',

@@ -129,11 +129,11 @@ export function AboutScreen() {
         <ul>
           <li>
             <strong>Transactions per day.</strong> One bar for each day with activity, so gaps are quiet stretches. A day with an unusual
-            transaction is orange with a triangle above it. Select a bar to open that day.
+            transaction is yellow with a triangle above it. Select a bar to open that day.
           </li>
           <li>
             <strong>Transactions over time.</strong> One point for each transaction: time across, amount up on a log scale, where each step up
-            is ten times larger. A filled mark was received and an outlined mark was sent. Unusual transactions are orange triangles and not-scored ones are grey
+            is ten times larger. A filled mark was received and an outlined mark was sent. Unusual transactions are yellow triangles and not-scored ones are grey
             diamonds. A bigger mark has a higher score. Drag across the time axis to zoom, which also sets the dates in the filter bar. Select a point to open that transaction.
           </li>
           <li>
