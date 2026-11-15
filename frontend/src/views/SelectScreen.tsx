@@ -89,7 +89,6 @@ export function SelectScreen({ query }: { query: string | null }) {
 
   const invalid = lookup.status === 'invalid';
   const slowLookup = useSlow(lookup.status === 'checking');
-  const snapshot = list.status === 'success' ? list.data.snapshot : null;
 
   return (
     <div className="page page-select">
@@ -105,7 +104,7 @@ export function SelectScreen({ query }: { query: string | null }) {
         </section>
 
       <section className="card lookup-card" aria-labelledby="lookup-title">
-        <h2 id="lookup-title">Look up an address</h2>
+        <h2 id="lookup-title" className="sr-only">Look up an address</h2>
         <form onSubmit={onSubmit} noValidate className="lookup-form">
           <label htmlFor="address-input" className="field-label">
             Bitcoin address
@@ -209,7 +208,7 @@ export function SelectScreen({ query }: { query: string | null }) {
 
 
       {recent.length > 0 ? (
-        <section className="recent-section" aria-labelledby="recent-title">
+        <section className="recent-section recent-inline" aria-labelledby="recent-title">
           <h2 id="recent-title">Recently opened</h2>
           <ul className="example-list">
             {recent.map((a) => (
@@ -226,12 +225,6 @@ export function SelectScreen({ query }: { query: string | null }) {
       <section className="snapshot-section" aria-labelledby="snapshot-title">
         <div className="section-head">
           <h2 id="snapshot-title">Addresses in the snapshot</h2>
-          {snapshot ? (
-            <p className="section-meta">
-              {plural(snapshot.addressCount, 'address', 'addresses')} · snapshot of {formatDay(snapshot.snapshotDate)} ·{' '}
-              {snapshot.source}
-            </p>
-          ) : null}
         </div>
         {list.status === 'loading' ? <Loading label="Loading the address list…" block /> : null}
         {list.status === 'error' ? <ErrorState error={list.error} onRetry={list.retry} /> : null}
@@ -387,14 +380,12 @@ function AddressTable({ addresses }: { addresses: AddressSummary[] }) {
                   <th scope="row" data-label="Address">
                     <span className="address-cell">
                       <WatchStar address={a.address} />
-                      <span>
+                      <span className="address-line">
                         <a className="address-link mono" href={paths.timeline(a.address, method ?? undefined)} aria-label={`Open activity for ${a.address}`}>
                           {shortAddress(a.address, 12, 8)}
                         </a>
-                        <span className="cell-sub">
-                          <span className="kind-chip">{KIND_LABEL[a.kind]}</span>
-                          {a.source === 'live' ? ' · live data' : ''}
-                        </span>
+                        <span className="kind-chip">{KIND_LABEL[a.kind]}</span>
+                        {a.source === 'live' ? <span className="kind-chip">live data</span> : null}
                       </span>
                     </span>
                   </th>

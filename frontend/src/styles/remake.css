@@ -1048,3 +1048,208 @@ select:hover {
 .address-link:hover {
   text-decoration: underline;
 }
+
+/* ------------------------------------------------------------------ v3: header tools, calmer home */
+
+/* Service status and theme switch live in the header now (the grey strip is gone). */
+.app-header .main-nav {
+  flex: 0 0 auto;
+}
+.header-spacer {
+  flex: 1 1 auto;
+}
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: 4px 14px;
+  flex: none;
+  margin-left: 4px;
+}
+.app-header .service-status {
+  color: var(--header-ink-2);
+  font-size: 0.8rem;
+}
+.app-header .service-status .status-words {
+  color: var(--header-ink);
+}
+/* When all is well the dot says it; the words stay for screen readers. Other states show their words and button. */
+.app-header .service-status[data-state='ready'] .status-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.app-header .service-status .status-button {
+  color: var(--header-ink);
+  border-color: rgba(201, 226, 245, 0.4);
+  background: transparent;
+}
+.app-header .theme-switch {
+  color: var(--header-ink-2);
+  font-size: 0;
+  gap: 0;
+  min-height: 44px;
+}
+.app-header .theme-switch .switch-track {
+  background: rgba(201, 226, 245, 0.3);
+}
+.app-header .theme-switch[aria-checked='true'] .switch-track {
+  background: var(--glacier-400);
+}
+@media (max-width: 719px) {
+  .header-tools {
+    order: 2;
+    margin-left: auto;
+  }
+  .app-header .nav-toggle {
+    margin-left: 0;
+    order: 3;
+  }
+  .header-spacer {
+    display: none;
+  }
+  .header-search {
+    order: 5;
+  }
+}
+
+/* Home hero: one big field on the navy, no panel inside a panel. */
+.hero-eyebrow {
+  color: var(--glacier-400);
+}
+.hero-art {
+  width: min(26%, 240px);
+}
+.hero-art-bar {
+  fill: rgba(156, 203, 240, 0.1);
+}
+.hero-art-flag {
+  opacity: 0.45;
+}
+.home-hero .lookup-card {
+  max-width: 44rem;
+  padding: 0;
+  gap: 8px;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  color: #ffffff;
+}
+.home-hero .field-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.home-hero .field-help {
+  margin: 0;
+  color: var(--glacier-300);
+  font-size: 0.8rem;
+}
+.home-hero .lookup-card .input-row .text-input {
+  min-height: 50px;
+  border: 1px solid transparent;
+  background: #ffffff;
+  color: var(--navy-800);
+  font-size: 1rem;
+}
+.home-hero .lookup-card .input-row .text-input::placeholder {
+  color: #5c6e82;
+}
+.home-hero .lookup-card .btn-primary {
+  min-height: 50px;
+  background: var(--lemon);
+  color: var(--navy-800);
+}
+.home-hero .lookup-card .btn-primary:hover {
+  background: #ffd92e;
+}
+.home-hero .field-error {
+  color: #ffc2c2;
+}
+.home-hero .lookup-card .text-input[aria-invalid='true'] {
+  border-color: #ffc2c2;
+  box-shadow: 0 0 0 1px #ffc2c2;
+}
+.home-hero .state-panel {
+  color: var(--text);
+}
+.home-hero .lookup-card :focus-visible {
+  outline-color: var(--lemon);
+  box-shadow: none;
+}
+:root[data-theme='dark'] .home-hero .lookup-card .input-row .text-input {
+  background: #0b1220;
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .home-hero .lookup-card .input-row .text-input {
+    background: #0b1220;
+    border-color: var(--border-strong);
+    color: var(--text);
+  }
+}
+
+/* Recently opened: one quiet line. */
+.recent-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+.recent-inline h2 {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.recent-inline .example-list a {
+  font-size: 0.8rem;
+}
+@media (pointer: fine) {
+  .recent-inline .example-list a {
+    min-height: 32px;
+  }
+}
+
+/* The list: one line per address, and a quiet steel share bar (gold stays on the small triangle). */
+.address-line {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+}
+.table-card .address-table th,
+.table-card .address-table td {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  vertical-align: middle;
+}
+.unusual-cell {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+.share-bar {
+  width: 64px;
+}
+.share-bar > span {
+  background: var(--series-1);
+  opacity: 0.6;
+}
+/* In the header the longer status hints are kept for screen readers only; the words and the retry button stay. */
+.app-header .status-hint {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

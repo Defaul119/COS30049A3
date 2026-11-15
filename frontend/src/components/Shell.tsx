@@ -42,7 +42,6 @@ export function Shell({ children }: { children: ReactNode }) {
     return () => window.removeEventListener('hashchange', close);
   }, []);
 
-  const { snapshot } = settings;
 
   return (
     <>
@@ -68,7 +67,8 @@ export function Shell({ children }: { children: ReactNode }) {
             </svg>
             <span className="brand-name">Bitcoin Address Activity Explorer</span>
           </a>
-          <HeaderSearch />
+          {/* The home page has its own large lookup, so the header's is left out there. */}
+          {route.screen === 'select' ? <span className="header-spacer" /> : <HeaderSearch />}
           <button
             type="button"
             className="nav-toggle"
@@ -79,14 +79,7 @@ export function Shell({ children }: { children: ReactNode }) {
             Menu
           </button>
           <MainNav id="main-nav" route={route} open={menuOpen} />
-        </div>
-        <div className="header-bar">
-          <div className="container header-bar-inner">
-            {snapshot ? (
-              <p className="header-meta">
-                Snapshot of {formatDay(snapshot.snapshotDate)} · {snapshot.source} · days in UTC
-              </p>
-            ) : null}
+          <div className="header-tools">
             <ServiceStatus />
             <ThemeSwitch />
           </div>
@@ -101,6 +94,12 @@ export function Shell({ children }: { children: ReactNode }) {
           <p className="footer-limitation">
             <Icon name="info" /> {settings.limitationLine}
           </p>
+          {/* What the data is: from E2, so it only appears once the service has answered. */}
+          {settings.snapshot ? (
+            <p className="footer-snapshot">
+              Snapshot of {formatDay(settings.snapshot.snapshotDate)} · {settings.snapshot.source} · days in UTC
+            </p>
+          ) : null}
           <p>
             Unusual means different from the same address's own earlier activity. Days and times are in UTC. COS30049
             Computing Technology Innovation Project, group HCMC_COS30049.1_4.
