@@ -207,20 +207,6 @@ export function SelectScreen({ query }: { query: string | null }) {
 
       {list.status === 'success' && list.data.addresses.length > 0 ? <SnapshotSummary addresses={list.data.addresses} snapshotDate={list.data.snapshot.snapshotDate} source={list.data.snapshot.source} /> : null}
 
-      <ol className="how-steps" aria-label="How to use the explorer">
-        <li>
-          <span className="how-num" aria-hidden="true">1</span>
-          <span><strong>Pick an address</strong> from the list or look one up.</span>
-        </li>
-        <li>
-          <span className="how-num" aria-hidden="true">2</span>
-          <span><strong>Read its timeline</strong>: days with an unusual transaction are marked.</span>
-        </li>
-        <li>
-          <span className="how-num" aria-hidden="true">3</span>
-          <span><strong>Open a day</strong> to see which transaction stands out, and why.</span>
-        </li>
-      </ol>
 
       {recent.length > 0 ? (
         <section className="recent-section" aria-labelledby="recent-title">

@@ -949,46 +949,6 @@ select:hover {
   }
 }
 
-.how-steps {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.how-steps li {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 12px 14px;
-  border: 1px dashed var(--border-strong);
-  border-radius: var(--radius-sm);
-  color: var(--text-2);
-  font-size: 0.85rem;
-}
-.how-steps strong {
-  color: var(--text);
-  font-weight: 600;
-}
-.how-num {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: var(--on-accent);
-  font-size: 0.78rem;
-  font-weight: 600;
-}
-@media (max-width: 759px) {
-  .how-steps {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
 .recent-section h2,
 .snapshot-section h2 {
   font-size: 1rem;
